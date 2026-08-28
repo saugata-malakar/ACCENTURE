@@ -160,6 +160,15 @@ def trigger_data_update():
         raise HTTPException(status_code=500, detail=str(exc))
 
 
+# In-memory response cache for instant latency on low-resource hosts
+_DASHBOARD_CACHE = {}
+_TRENDS_CACHE = {}
+_ALERTS_CACHE = {}
+_CACHE_LOCK = threading.Lock()
+_CACHE_TTL = 60.0  # 60 seconds TTL
+
+
+
 # ==================== Dashboard ====================
 
 @app.get("/api/dashboard")
@@ -167,13 +176,22 @@ def get_dashboard(
     persona: str = Query("ceo"),
     role: str = Query("ceo"),
 ):
-    """Dashboard summary: KPI cards, top alerts, aggregate telemetry."""
+    """Dashboard summary: KPI cards, top alerts, aggregate telemetry with fast TTL caching."""
+    cache_key = f"{persona}:{role}"
+    now = time.time()
+    
+    with _CACHE_LOCK:
+        if cache_key in _DASHBOARD_CACHE:
+            cached_time, cached_data = _DASHBOARD_CACHE[cache_key]
+            if now - cached_time < _CACHE_TTL:
+                return cached_data
+
     t0 = time.perf_counter()
     scan = pipeline.run_all_kpis(persona=role)
     active_alerts = alerts.scan_all_kpis(role=role)[:5]
     latency = round((time.perf_counter() - t0) * 1000, 1)
 
-    return {
+    response_data = {
         "persona": persona,
         "kpi_summaries": scan["kpi_summaries"],
         "active_alerts": active_alerts,
@@ -183,6 +201,11 @@ def get_dashboard(
         },
     }
 
+    with _CACHE_LOCK:
+        _DASHBOARD_CACHE[cache_key] = (now, response_data)
+
+    return response_data
+
 
 @app.get("/api/dashboard/trends")
 def get_dashboard_trends(
@@ -191,8 +214,17 @@ def get_dashboard_trends(
 ):
     """
     Returns sparkline time-series data for all KPIs × regions for the
-    last `days` days. Used by the frontend to render trend charts in KPI cards.
+    last `days` days with fast in-memory caching.
     """
+    cache_key = f"{role}:{days}"
+    now = time.time()
+
+    with _CACHE_LOCK:
+        if cache_key in _TRENDS_CACHE:
+            cached_time, cached_data = _TRENDS_CACHE[cache_key]
+            if now - cached_time < _CACHE_TTL:
+                return cached_data
+
     tx, mk, sp = ingest.load_sources()
     daily = ingest.daily_kpis(tx, sp)
 
@@ -229,7 +261,12 @@ def get_dashboard_trends(
             ]
             result[kpi_name][region] = series
 
-    return {"trends": result, "days": days}
+    response_data = {"trends": result, "days": days}
+    with _CACHE_LOCK:
+        _TRENDS_CACHE[cache_key] = (now, response_data)
+
+    return response_data
+
 
 
 # ==================== Case Analysis ====================
