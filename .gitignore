@@ -1,8 +1,10 @@
 # Node / Vite
 node_modules/
-dist/
 dist-ssr/
 *.local
+!kpi_engine/frontend/dist/
+!kpi_engine/frontend/dist/**
+
 
 # Python
 __pycache__/
