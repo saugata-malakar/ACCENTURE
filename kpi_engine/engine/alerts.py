@@ -37,9 +37,9 @@ def scan_all_kpis(role: str = "ceo") -> List[dict]:
     """
     from . import access
 
-    tx, mk, sp = ingest.load_sources()
-    daily = ingest.daily_kpis(tx, sp)
+    daily = ingest.daily_kpis()
     graph = knowledge_graph.get_graph()
+
 
     contracts = access.load_contracts()
     regions = daily["region"].unique().tolist()

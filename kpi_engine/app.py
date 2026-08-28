@@ -225,8 +225,8 @@ def get_dashboard_trends(
             if now - cached_time < _CACHE_TTL:
                 return cached_data
 
-    tx, mk, sp = ingest.load_sources()
-    daily = ingest.daily_kpis(tx, sp)
+    daily = ingest.daily_kpis()
+
 
     from engine import access as access_module
     contracts = access_module.load_contracts()

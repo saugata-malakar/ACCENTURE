@@ -129,11 +129,11 @@ def run_all_kpis(persona: str = "ceo") -> dict:
     collector = TelemetryCollector()
 
     t0 = time.perf_counter()
-    tx, mk, sp = ingest.load_sources()
-    daily = ingest.daily_kpis(tx, sp)
+    daily = ingest.daily_kpis()
     from . import access
     contracts = access.load_contracts()
     collector.record("ingest", "deterministic", (time.perf_counter() - t0) * 1000)
+
 
     t0 = time.perf_counter()
     flagged = detect.detect_all_shifts(daily, contracts)

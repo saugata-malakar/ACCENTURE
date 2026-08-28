@@ -55,8 +55,9 @@ def detect_shift(daily: pd.DataFrame, region: str, week_start: pd.Timestamp,
     significant = abs(z) >= 1.5          # trailing-window z-score threshold
     material = abs(pct_change) >= threshold_pct
 
-    # Supplementary forecast check
-    forecast_check = forecasting.forecast_anomaly_check(daily, region, week_start, metric)
+    # Supplementary forecast check (lazy evaluation — only compute on flagged shifts)
+    forecast_check = forecasting.forecast_anomaly_check(daily, region, week_start, metric) if (significant and material) else None
+
 
     result = {
         "flagged": bool(significant and material),
