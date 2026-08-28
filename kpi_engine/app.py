@@ -1046,8 +1046,8 @@ def get_drift_status():
     Returns stale insights where the top driver or confidence has changed.
     """
     try:
-        tx, mk, sp = ingest.load_sources()
-        daily = ingest.daily_kpis(tx, sp)
+        daily = ingest.daily_kpis()
+        mk = ingest.query_db("SELECT * FROM marketing")
         stale = drift_monitor.check_drift(daily, mk)
         all_stale = drift_monitor.get_stale_insights()
         return {
@@ -1058,6 +1058,7 @@ def get_drift_status():
         }
     except Exception as e:
         return {"error": str(e), "stale_insights": [], "total_stale": 0}
+
 
 
 # ==================== Action Outcomes ====================
@@ -1134,6 +1135,7 @@ if os.path.exists(STATIC_DIR):
         
         index_file = os.path.join(STATIC_DIR, "index.html")
         if os.path.exists(index_file):
-            return FileResponse(index_file)
+            return FileResponse(index_file, headers={"Cache-Control": "no-cache, no-store, must-revalidate"})
         raise HTTPException(status_code=404, detail="Frontend build index.html not found")
+
 
