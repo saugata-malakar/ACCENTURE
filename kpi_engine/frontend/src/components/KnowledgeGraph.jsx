@@ -365,12 +365,34 @@ export default function KnowledgeGraph() {
                       className="cursor-pointer transition-all duration-200"
                       opacity={isDimmed ? 0.35 : 1}
                     >
-                      {/* Selection / Hover Glow Ring */}
-                      {(isSelected || isHovered) && (
+                      {/* Shockwave / Propagation Animation Ring on Selection */}
+                      {isSelected && (
+                        <>
+                          <circle
+                            r={radius + 14}
+                            fill="none"
+                            stroke={isKpi ? '#6366f1' : '#10b981'}
+                            strokeWidth="2"
+                            opacity="0.6"
+                            className="animate-ping"
+                          />
+                          <circle
+                            r={radius + 8}
+                            fill={isKpi ? 'rgba(79, 70, 229, 0.25)' : 'rgba(16, 185, 129, 0.25)'}
+                          />
+                        </>
+                      )}
+
+                      {/* Anomaly Health Status Halo */}
+                      {(node.id === 'Revenue' || node.id === 'Checkout Error Rate') && (
                         <circle
-                          r={radius + 8}
-                          fill={isKpi ? 'rgba(79, 70, 229, 0.2)' : 'rgba(16, 185, 129, 0.2)'}
-                          className="animate-pulse"
+                          r={radius + 5}
+                          fill="none"
+                          stroke="#ef4444"
+                          strokeWidth="2"
+                          strokeDasharray="4 2"
+                          className="animate-spin"
+                          style={{ animationDuration: '6s' }}
                         />
                       )}
 
@@ -378,7 +400,7 @@ export default function KnowledgeGraph() {
                       <circle
                         r={radius}
                         fill={isKpi ? (node.id === 'Revenue' ? '#312e81' : '#4f46e5') : '#10b981'}
-                        stroke={isSelected ? '#f59e0b' : '#ffffff'}
+                        stroke={isSelected ? '#f59e0b' : (node.id === 'Revenue' || node.id === 'Checkout Error Rate') ? '#ef4444' : '#ffffff'}
                         strokeWidth={isSelected ? 3.5 : 2.5}
                         className="shadow-lg hover:scale-105 transition-transform"
                         filter={isSelected ? "url(#glow)" : undefined}

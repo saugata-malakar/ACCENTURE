@@ -4,6 +4,12 @@ Stage 1: Ingest & Fuse
 Loads the three heterogeneous sources and reconciles them onto a single
 date + region grain.
 
+Data Layer: DuckDB (analytical in-process database)
+  - CSVs are registered as persistent DuckDB views on first load
+  - Subsequent calls query DuckDB — no re-reading files from disk
+  - Gives the project a proper analytical DB story (not just pandas CSV reads)
+  - DuckDB auto-infers schema, handles date parsing, and supports SQL queries
+
 Round 2 additions:
   - Source metadata tracking: records refresh timestamps, row counts, schema validation
   - Grain reconciliation report: shows how daily/weekly/irregular sources are aligned
@@ -11,16 +17,144 @@ Round 2 additions:
 """
 import os
 import pandas as pd
+import threading
 from typing import Dict, Tuple
 
 DATA_DIR = os.path.join(os.path.dirname(__file__), "..", "data")
 
+# ---------------------------------------------------------------------------
+# DuckDB analytical layer
+# ---------------------------------------------------------------------------
+
+_db = None  # module-level singleton connection
+_db_lock = threading.Lock()
+
+
+def _init_db():
+    """
+    Create a fresh DuckDB connection with all 3 source tables registered.
+    """
+    try:
+        import duckdb
+        conn = duckdb.connect(database=":memory:")  # in-process, no server needed
+
+        # Register each CSV as a DuckDB view — schema is auto-inferred
+        tx_path = os.path.join(DATA_DIR, "transactions.csv").replace("\\", "/")
+        mk_path = os.path.join(DATA_DIR, "marketing.csv").replace("\\", "/")
+        sp_path = os.path.join(DATA_DIR, "support_tickets.csv").replace("\\", "/")
+
+        conn.execute(f"""
+            CREATE OR REPLACE TABLE transactions AS
+            SELECT * EXCLUDE (date), CAST(date AS DATE) AS date
+            FROM read_csv_auto('{tx_path}', header=true)
+        """)
+        conn.execute(f"""
+            CREATE OR REPLACE TABLE marketing AS
+            SELECT * EXCLUDE (week_start), CAST(week_start AS DATE) AS week_start
+            FROM read_csv_auto('{mk_path}', header=true)
+        """)
+        conn.execute(f"""
+            CREATE OR REPLACE TABLE support_tickets AS
+            SELECT * EXCLUDE (date), CAST(date AS DATE) AS date
+            FROM read_csv_auto('{sp_path}', header=true)
+        """)
+
+        return conn
+
+    except Exception as e:
+        import traceback
+        traceback.print_exc()
+        return None
+
+
+def _get_db():
+    """
+    Return a cached DuckDB connection with all 3 source tables registered.
+    First call reads CSVs and creates in-memory tables; subsequent calls
+    reuse the connection (zero file I/O after initial load).
+    """
+    global _db
+    if _db is not None:
+        return _db
+
+    with _db_lock:
+        if _db is not None:
+            return _db
+        _db = _init_db()
+        return _db
+
+
+def refresh_db():
+    """
+    Force-reload DuckDB tables from CSVs. Call this after data_updater
+    appends new rows so queries pick up the latest data.
+    """
+    global _db
+    with _db_lock:
+        try:
+            if _db is not None:
+                _db.close()
+        except Exception:
+            pass
+        _db = None
+    # Re-initialize
+    _get_db()
+
+
+def _duckdb_to_df(query: str) -> pd.DataFrame:
+    """Run a DuckDB query and return a pandas DataFrame.
+    Auto-recovers from stale/closed connections by resetting and retrying."""
+    global _db
+    conn = _get_db()
+    if conn is None:
+        raise RuntimeError("DuckDB not available.")
+    try:
+        with _db_lock:
+            return conn.execute(query).df()
+    except Exception:
+        # Connection might be stale — reset and retry once
+        with _db_lock:
+            try:
+                conn.close()
+            except Exception:
+                pass
+            _db = None
+        conn = _get_db()
+        if conn is None:
+            raise RuntimeError("DuckDB reconnect failed.")
+        with _db_lock:
+            return conn.execute(query).df()
+
 
 def load_sources() -> Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
-    tx = pd.read_csv(os.path.join(DATA_DIR, "transactions.csv"), parse_dates=["date"])
-    mk = pd.read_csv(os.path.join(DATA_DIR, "marketing.csv"), parse_dates=["week_start"])
-    sp = pd.read_csv(os.path.join(DATA_DIR, "support_tickets.csv"), parse_dates=["date"])
+    """
+    Load all 3 source tables via DuckDB (analytical in-process DB).
+    Returns pandas DataFrames for compatibility with downstream pipeline stages.
+    """
+    try:
+        tx = _duckdb_to_df("SELECT * FROM transactions")
+        mk = _duckdb_to_df("SELECT * FROM marketing")
+        sp = _duckdb_to_df("SELECT * FROM support_tickets")
+    except Exception:
+        # Fallback to direct pandas CSV read with proper types
+        tx_path = os.path.join(DATA_DIR, "transactions.csv")
+        mk_path = os.path.join(DATA_DIR, "marketing.csv")
+        sp_path = os.path.join(DATA_DIR, "support_tickets.csv")
+        tx = pd.read_csv(tx_path)
+        mk = pd.read_csv(mk_path)
+        sp = pd.read_csv(sp_path)
+
+    # Ensure datetime types
+    tx["date"] = pd.to_datetime(tx["date"])
+    mk["week_start"] = pd.to_datetime(mk["week_start"])
+    sp["date"] = pd.to_datetime(sp["date"])
+
     return tx, mk, sp
+
+
+def query_db(sql: str) -> pd.DataFrame:
+    """Run arbitrary SQL against the DuckDB analytical layer. Exposed for /api/query endpoint."""
+    return _duckdb_to_df(sql)
 
 
 def source_metadata(tx: pd.DataFrame, mk: pd.DataFrame, sp: pd.DataFrame) -> dict:

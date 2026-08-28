@@ -2,9 +2,10 @@ import { Link, useLocation } from 'react-router-dom';
 import { usePersona } from '../context/PersonaContext';
 import { 
   BarChart2, Bell, Network, CheckCircle2, MessageSquare, 
-  Rocket, ShieldCheck, ExternalLink, Zap, User, Sparkles, Database, Sliders
+  Rocket, ShieldCheck, ExternalLink, Zap, User, Sparkles, Database, Sliders, Target
 } from 'lucide-react';
 import AccentureLogo, { AccentureSymbol } from './AccentureLogo';
+import DriftAlertsPanel from './DriftAlertsPanel';
 
 export default function Sidebar() {
   const { persona, setPersona } = usePersona();
@@ -19,6 +20,7 @@ export default function Sidebar() {
     { name: 'Engine Calibration', path: '/calibration', icon: CheckCircle2, badge: null },
     { name: 'Decision Assistant', path: '/chat', icon: MessageSquare, badge: 'Live Web' },
     { name: 'Sparse History', path: '/sparse-history', icon: Rocket, badge: null },
+    { name: 'Action Outcomes', path: '/action-outcomes', icon: Target, badge: 'New' },
   ];
 
   return (
@@ -103,7 +105,7 @@ export default function Sidebar() {
           <div className="pt-1 flex items-center justify-between text-[10px] text-slate-500">
             <span>Accenture AI Advisory</span>
             <a 
-              href="http://localhost:8000/docs" 
+              href={`${window.location.protocol}//${window.location.hostname}:8000/docs`} 
               target="_blank" 
               rel="noreferrer" 
               className="text-[#d896ff] hover:text-white flex items-center gap-1 font-semibold"
@@ -112,6 +114,11 @@ export default function Sidebar() {
             </a>
           </div>
         </div>
+      </div>
+
+      {/* Drift Alerts Panel */}
+      <div className="px-4 pb-3">
+        <DriftAlertsPanel />
       </div>
 
     </div>

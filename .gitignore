@@ -38,3 +38,11 @@ Thumbs.db
 .vscode/
 .idea/
 *.log
+*.exe
+*.zip
+ngrok_bin/
+cloudflared*
+.env
+.env.*
+*.env
+

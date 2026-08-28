@@ -1,0 +1,30 @@
+services:
+  # ── FastAPI Backend ──
+  - type: web
+    name: kpi-engine-api
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app:app --host 0.0.0.0 --port $PORT
+    rootDir: kpi_engine
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.11.0"
+      - key: GROQ_API_KEY
+        sync: false
+      - key: GEMINI_API_KEY
+        sync: false
+
+  # ── React Frontend ──
+  - type: web
+    name: kpi-engine-frontend
+    runtime: static
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist
+    rootDir: kpi_engine/frontend
+    routes:
+      - type: rewrite
+        source: /api/*
+        destination: https://kpi-engine-api.onrender.com/api/*
+      - type: rewrite
+        source: /*
+        destination: /index.html
