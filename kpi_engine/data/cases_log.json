@@ -39,19 +39,6 @@
     "stale_reason": "Top driver changed: was 'None', now 'Marketing spend'"
   },
   {
-    "logged_at": "2026-08-28T05:59:59.000015+00:00",
-    "region": "East Region",
-    "week_start": "2026-08-11",
-    "metric": "revenue",
-    "top_driver": "None",
-    "confidence_level": "N/A",
-    "contribution_pct": 0,
-    "narrative_hash": "",
-    "drift_checked_at": "2026-08-28T19:43:21.548462+00:00",
-    "is_stale": true,
-    "stale_reason": "Top driver changed: was 'None', now 'Checkout error rate'"
-  },
-  {
     "logged_at": "2026-08-28T06:22:47.079491+00:00",
     "region": "North Region",
     "week_start": "2026-08-18",
@@ -63,5 +50,31 @@
     "drift_checked_at": "2026-08-28T19:43:21.548462+00:00",
     "is_stale": true,
     "stale_reason": "Top driver changed: was 'None', now 'Checkout error rate'"
+  },
+  {
+    "logged_at": "2026-08-29T05:30:22.569065+00:00",
+    "region": "East Region",
+    "week_start": "2026-08-11",
+    "metric": "revenue",
+    "top_driver": "None",
+    "confidence_level": "N/A",
+    "contribution_pct": 0,
+    "narrative_hash": "",
+    "drift_checked_at": null,
+    "is_stale": false,
+    "stale_reason": null
+  },
+  {
+    "logged_at": "2026-08-29T05:35:22.810481+00:00",
+    "region": "East Region",
+    "week_start": "2026-08-24",
+    "metric": "revenue",
+    "top_driver": "Purchase frequency",
+    "confidence_level": "LOW",
+    "contribution_pct": 53,
+    "narrative_hash": "",
+    "drift_checked_at": null,
+    "is_stale": false,
+    "stale_reason": null
   }
 ]

@@ -355,9 +355,9 @@ def data_quality_report(tx: pd.DataFrame, mk: pd.DataFrame, sp: pd.DataFrame) ->
 
     # Transactions quality
     tx_issues = []
-    dup_orders = int(tx["order_id"].duplicated().sum())
-    if dup_orders:
-        tx_issues.append(f"{dup_orders} duplicate order_id(s)")
+    dup_rows = int(tx.duplicated().sum())
+    if dup_rows:
+        tx_issues.append(f"{dup_rows} duplicate row(s)")
     bad_price = int((tx["price"] <= 0).sum())
     if bad_price:
         tx_issues.append(f"{bad_price} row(s) with non-positive price")

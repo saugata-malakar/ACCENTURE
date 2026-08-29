@@ -649,10 +649,10 @@ def chat(body: ChatIn):
                     "title": f"Root-Cause Drivers — {region} (Week of {week})",
                     "data": [
                         {
-                            "name": d["driver"],
-                            "contribution": d["contribution_pct"],
-                            "change": d["pct_change"],
-                            "confidence": d.get("confidence", ""),
+                            "name": str(d["driver"]),
+                            "contribution": int(d["contribution_pct"]) if d.get("contribution_pct") is not None else 0,
+                            "change": float(d["pct_change"]) if d.get("pct_change") is not None else 0.0,
+                            "confidence": str(d.get("confidence", "")),
                         }
                         for d in case["drivers"]
                     ],

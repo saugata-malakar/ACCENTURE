@@ -89,5 +89,44 @@
     "corrected_cause": null,
     "severity_rating": 5,
     "action_effectiveness": null
+  },
+  {
+    "timestamp": "2026-08-29T05:30:20.295160+00:00",
+    "analyst": "test_analyst",
+    "region": "East Region",
+    "metric": "revenue",
+    "week_start": "2026-08-11",
+    "system_top_driver": null,
+    "system_confidence": "N/A",
+    "verdict": "confirmed",
+    "corrected_cause": null,
+    "severity_rating": 5,
+    "action_effectiveness": null
+  },
+  {
+    "timestamp": "2026-08-29T05:33:47.511195+00:00",
+    "analyst": "test_analyst",
+    "region": "East Region",
+    "metric": "revenue",
+    "week_start": "2026-08-24",
+    "system_top_driver": "Purchase frequency",
+    "system_confidence": "LOW",
+    "verdict": "confirmed",
+    "corrected_cause": null,
+    "severity_rating": 5,
+    "action_effectiveness": null
+  },
+  {
+    "timestamp": "2026-08-29T05:35:25.382317+00:00",
+    "analyst": "test_analyst",
+    "region": "East Region",
+    "metric": "revenue",
+    "week_start": "2026-08-24",
+    "system_top_driver": "Purchase frequency",
+    "system_confidence": "LOW",
+    "verdict": "confirmed",
+    "corrected_cause": null,
+    "severity_rating": 5,
+    "action_effectiveness": null
   }
 ]

@@ -24,8 +24,13 @@ def score(freshness: dict, ranked_drivers: list) -> dict:
     """
     Score overall case confidence based on data freshness and driver quality.
     """
-    missing_or_stale = [src for src, meta in freshness.items()
-                         if (not meta["present"]) or meta["stale"]]
+    missing_or_stale = []
+    for src, meta in freshness.items():
+        if isinstance(meta, dict):
+            if (not meta.get("present", True)) or meta.get("stale", False):
+                missing_or_stale.append(src)
+        elif not bool(meta):
+            missing_or_stale.append(src)
 
     if missing_or_stale:
         return {

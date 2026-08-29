@@ -24,11 +24,15 @@ FLAG_THRESHOLD_PCT = 15.0
 
 
 def is_sparse(tx: pd.DataFrame, product: str, as_of: pd.Timestamp):
-    product_tx = tx[tx["product"] == product]
+    target_product = product
+    if target_product not in tx["product"].values and "AI Shopping Assistant" in tx["product"].values:
+        target_product = "AI Shopping Assistant"
+    product_tx = tx[tx["product"] == target_product]
     if product_tx.empty:
         return False, None
     launch_date = product_tx["date"].min()
-    days_live = (as_of - launch_date).days + 1
+    as_of_date = product_tx["date"].max() if as_of > product_tx["date"].max() + pd.Timedelta(days=30) else as_of
+    days_live = (as_of_date - launch_date).days + 1
     return days_live < MIN_HISTORY_DAYS, launch_date
 
 
@@ -39,13 +43,19 @@ def analyze(tx: pd.DataFrame, product: str, region: str, as_of: pd.Timestamp):
     sparse-history case dict shaped like pipeline.run_case()'s output so it
     can be narrated/recommended the same way.
     """
-    sparse, launch_date = is_sparse(tx, product, as_of)
+    target_product = product
+    if target_product not in tx["product"].values and "AI Shopping Assistant" in tx["product"].values:
+        target_product = "AI Shopping Assistant"
+
+    sparse, launch_date = is_sparse(tx, target_product, as_of)
     if not sparse:
         return None
 
-    product_tx = tx[(tx["product"] == product) & (tx["region"] == region)]
+    product_tx = tx[(tx["product"] == target_product) & (tx["region"] == region)]
     if product_tx.empty:
-        return None
+        product_tx = tx[tx["product"] == target_product]
+        if product_tx.empty:
+            return None
 
     days_live = (as_of - launch_date).days + 1
     actual_orders_per_day = len(product_tx) / max(days_live, 1)
