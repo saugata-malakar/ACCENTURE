@@ -268,9 +268,9 @@ function ChatMessage({ msg, onPin }) {
 function ReasoningIndicator() {
   const [stage, setStage] = useState(0);
   const stages = [
-    '🔍 Ingesting DuckDB metrics & temporal tables...',
-    '📈 Traversing causal DAG & checking precedence (t_driver ≤ t_kpi)...',
-    '🧠 Synthesizing persona-tailored narrative with evidence pinning...',
+    'Ingesting DuckDB metrics & temporal tables...',
+    'Traversing causal DAG & checking precedence (t_driver ≤ t_kpi)...',
+    'Synthesizing persona-tailored narrative with evidence pinning...',
   ];
 
   useEffect(() => {
@@ -353,7 +353,7 @@ export default function ChatPage() {
     } catch (err) {
       setMessages(prev => [...prev, {
         role: 'assistant',
-        content: `⚠️ Error: ${err.message}. Please check that the backend is running.`,
+        content: `Error: ${err.message}. Please check that the backend is running.`,
       }]);
     } finally {
       setLoading(false);
@@ -379,7 +379,7 @@ export default function ChatPage() {
   };
 
   const handleExport = () => {
-    const md = messages.map(m => `### ${m.role === 'user' ? '👤 User' : '🤖 Decision Assistant'}\n${m.content}\n`).join('\n---\n\n');
+    const md = messages.map(m => `### ${m.role === 'user' ? 'User' : 'Decision Assistant'}\n${m.content}\n`).join('\n---\n\n');
     const blob = new Blob([md], { type: 'text/markdown' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');

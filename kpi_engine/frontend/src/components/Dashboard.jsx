@@ -268,9 +268,9 @@ export default function Dashboard() {
             <AccentureLogo className="h-4 opacity-90" variant="light" />
             <span className="text-slate-500">•</span>
             <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-[#a100ff]/20 text-[#d896ff] border border-[#a100ff]/30">
-              {persona === 'ceo' ? '👑 Executive Strategy Suite'
-               : persona === 'manager' ? '⚙️ Operations Command'
-               : '🔬 Quantitative Deep-Dive'}
+              {persona === 'ceo' ? 'Executive Strategy Suite'
+               : persona === 'manager' ? 'Operations Command'
+               : 'Quantitative Deep-Dive'}
             </span>
             <span className={`px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider ${threatColor}`}>
               THREAT: {threatLevel}
@@ -393,7 +393,7 @@ export default function Dashboard() {
               </div>
               <div className="flex items-center gap-2">
                 <span className="text-xs font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-3 py-1 rounded-full flex items-center gap-1.5">
-                  <Flame size={13} className="text-emerald-500" /> +$142,000 Annualized Recovery Potential
+                  <Flame size={13} className="text-emerald-500" /> +${(data?.summary?.total_revenue_at_risk ? Math.round(data.summary.total_revenue_at_risk * 52 * 0.8) : 142000).toLocaleString()} Annualized Recovery Potential
                 </span>
               </div>
             </div>

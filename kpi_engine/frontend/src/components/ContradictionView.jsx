@@ -35,7 +35,7 @@ export default function ContradictionView({ contradictions, drivers }) {
       {/* Contradiction descriptions */}
       {contradictions.map((c, i) => (
         <div key={i} className="text-[10px] text-amber-700 bg-amber-100 rounded-xl px-3 py-2 font-medium">
-          ⚡ {c}
+          {c}
         </div>
       ))}
 

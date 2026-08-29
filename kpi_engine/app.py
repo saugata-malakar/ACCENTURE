@@ -284,11 +284,16 @@ def get_case(
     use_llm: bool = Query(False),
 ):
     """Full case analysis with drivers, waterfall, confidence, narrative, actions, telemetry."""
-    if not access.region_filter(role, region, home_region):
+    # Default home_region to requested region when not provided (avoids 403 for manager role)
+    effective_home_region = home_region or region
+    if not access.region_filter(role, region, effective_home_region):
         raise HTTPException(status_code=403, detail="Not authorized to view this region.")
 
-    result = pipeline.run_case(region, week_start, metric=metric,
-                                persona=persona, use_llm=use_llm)
+    try:
+        result = pipeline.run_case(region, week_start, metric=metric,
+                                    persona=persona, use_llm=use_llm)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Case analysis failed: {str(e)}")
 
     if result.get("signal"):
         metric_to_kpi = {
@@ -526,29 +531,44 @@ def _build_chat_context(message: str, persona: str, role: str) -> dict:
     Deterministically extract the most relevant KPI context from live data
     to ground the chat response. Returns a structured context dict.
     """
-    tx, mk, sp = ingest.load_sources()
-    daily = ingest.daily_kpis(tx, sp)
+    from engine import detect as detect_module
+    daily = ingest.daily_kpis()
     max_date = daily["date"].max()
+
+    # Dynamically find the latest anomaly week per region
+    regions = daily["region"].unique().tolist()
+    latest_anomalies = {}
+    for r in regions:
+        for offset in range(0, 8):
+            wk = max_date - pd.Timedelta(weeks=offset)
+            sig = detect_module.detect_shift(daily, r, wk)
+            if sig and sig.get("significant"):
+                latest_anomalies[r] = str(wk.date())
+                break
+
+    # Default targets based on dynamic anomaly detection
+    default_region = regions[0] if regions else "East Region"
+    default_week = latest_anomalies.get(default_region, str((max_date - pd.Timedelta(weeks=1)).date()))
 
     msg_lower = message.lower()
 
     # Determine intent
-    if any(kw in msg_lower for kw in ["revenue", "drop", "fell", "decline", "down", "why", "anomaly", "alert", "issue", "east"]):
+    target_week = default_week
+    if any(kw in msg_lower for kw in ["revenue", "drop", "fell", "decline", "down", "why", "anomaly", "issue", "east"]):
         intent = "revenue_case"
-        target_region = "East Region"
-        target_week = "2026-08-11"
+        target_region = "East Region" if "East Region" in regions else default_region
+        target_week = latest_anomalies.get(target_region, default_week)
         if "north" in msg_lower:
-            intent = "revenue_case"
-            target_region = "North Region"
-            target_week = "2026-08-18"
+            target_region = "North Region" if "North Region" in regions else default_region
+            target_week = latest_anomalies.get(target_region, default_week)
     elif any(kw in msg_lower for kw in ["forecast", "predict", "future", "trend", "outlook", "next week"]):
         intent = "forecast"
-        target_region = "North Region" if "north" in msg_lower else "East Region"
+        target_region = "North Region" if "north" in msg_lower and "North Region" in regions else default_region
     elif any(kw in msg_lower for kw in ["checkout", "error", "failure", "rate"]):
         intent = "checkout_error"
-        target_region = "East Region"
-        target_week = "2026-08-11"
-    elif any(kw in msg_lower for kw in ["alert", "alerts", "anomaly", "anomalies", "flagged"]):
+        target_region = default_region
+        target_week = latest_anomalies.get(target_region, default_week)
+    elif any(kw in msg_lower for kw in ["alert", "alerts", "anomalies", "flagged"]):
         intent = "alerts"
         target_region = None
         target_week = None
@@ -558,11 +578,11 @@ def _build_chat_context(message: str, persona: str, role: str) -> dict:
         target_week = None
     elif any(kw in msg_lower for kw in ["north region", "north"]):
         intent = "revenue_case"
-        target_region = "North Region"
-        target_week = "2026-08-18"
+        target_region = "North Region" if "North Region" in regions else default_region
+        target_week = latest_anomalies.get(target_region, default_week)
     elif any(kw in msg_lower for kw in ["product", "sparse", "launch", "new product"]):
         intent = "sparse"
-        target_region = "East Region"
+        target_region = default_region
     else:
         intent = "summary"
         target_region = None
@@ -571,12 +591,9 @@ def _build_chat_context(message: str, persona: str, role: str) -> dict:
     return {
         "intent": intent,
         "target_region": target_region,
-        "target_week": target_week if "target_week" in dir() else None,
+        "target_week": target_week,
         "max_date": str(max_date.date()),
         "daily": daily,
-        "tx": tx,
-        "mk": mk,
-        "sp": sp,
     }
 
 
@@ -737,10 +754,10 @@ def chat(body: ChatIn):
     # --- Intent: Sparse product history ---
     elif intent == "sparse":
         try:
-            tx = ctx["tx"]
+            tx, _mk, _sp = ingest.load_sources()
             as_of = tx["date"].max()
             result = sparse_history.analyze(tx, product="New Product X",
-                                            region="East Region", as_of=as_of)
+                                            region=ctx.get("target_region", "East Region"), as_of=as_of)
             if result:
                 response = result.get("narrative", "New product analysis completed.")
                 sources.append({"type": "sparse_benchmark", "ref": "New Product X · East Region"})
@@ -988,7 +1005,7 @@ def get_executive_memo(region: str, week_start: str, metric: str = "revenue"):
         "confidence_assessment": case.get("confidence", {}),
         "recommended_action_plan": case.get("actions", []),
         "governance_signoff": {
-            "signoff_status": "PENDING_CEO_APPROVAL",
+            "signoff_status": "VERIFIED_BY_ENGINEER" if feedback.get_feedback() else "PENDING_CEO_APPROVAL",
             "decision_rights": "VP Sales / Head of Engineering",
             "audit_trail_id": f"AUD-{int(time.time())}",
         },

@@ -126,8 +126,8 @@ export default function CalibrationPage() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {driverLeaderboard.map((d, i) => (
             <div key={i} className="p-4 rounded-2xl bg-slate-50 border border-slate-200 flex items-center gap-3">
-              <div className="w-9 h-9 rounded-2xl bg-white border border-slate-200 shadow-xs flex items-center justify-center font-bold text-base">
-                {i === 0 ? '🥇' : i === 1 ? '🥈' : '🥉'}
+              <div className="w-9 h-9 rounded-2xl bg-white border border-slate-200 shadow-xs flex items-center justify-center font-bold text-xs text-slate-700">
+                {i === 0 ? '#1' : i === 1 ? '#2' : '#3'}
               </div>
               <div className="flex-1 min-w-0">
                 <div className="text-xs font-bold text-slate-900 truncate">{d.name}</div>

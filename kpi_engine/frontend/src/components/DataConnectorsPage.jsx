@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { uploadCustomDataset, getDispatchHistory } from '../api/client';
+import { uploadCustomDataset, getDispatchHistory, getHealth } from '../api/client';
 import { 
   Database, Upload, CheckCircle2, AlertTriangle, ShieldCheck, 
   ExternalLink, Layers, RefreshCw, FileText, ArrowRight, Zap, Check, Lock, Cpu,
@@ -8,12 +8,12 @@ import {
 
 export default function DataConnectorsPage() {
   const [connectors, setConnectors] = useState([
-    { id: 'snowflake', name: 'Snowflake Data Warehouse', category: 'Data Warehouse', status: 'Connected', rows: '1.2M events/day', cadence: '15m sync', icon: '❄️', latency: '42ms', health: '99.98%' },
-    { id: 'databricks', name: 'Databricks Unity Catalog', category: 'Lakehouse', status: 'Connected', rows: '4.8M records', cadence: 'Hourly sync', icon: '🧱', latency: '110ms', health: '100.0%' },
-    { id: 'stripe', name: 'Stripe Billing & Payments', category: 'Payment Gateway', status: 'Connected', rows: '7,108 transactions', cadence: 'Real-time Webhook', icon: '💳', latency: '8ms', health: '99.99%' },
-    { id: 'salesforce', name: 'Salesforce Enterprise CRM', category: 'CRM & Pipeline', status: 'Connected', rows: '342 accounts', cadence: 'Daily sync', icon: '☁️', latency: '240ms', health: '99.85%' },
-    { id: 'bigquery', name: 'Google BigQuery', category: 'Analytics Lake', status: 'Available', rows: '—', cadence: 'Batch sync', icon: '🔍', latency: '—', health: 'Ready' },
-    { id: 'postgres', name: 'PostgreSQL Operational DB', category: 'OLTP Database', status: 'Available', rows: '—', cadence: 'CDC Streaming', icon: '🐘', latency: '—', health: 'Ready' },
+    { id: 'snowflake', name: 'Snowflake Data Warehouse', category: 'Data Warehouse', status: 'Connected', rows: '600,000+ tx rows', cadence: 'Zero-Copy DuckDB', icon: '', latency: '24ms', health: '99.98%' },
+    { id: 'databricks', name: 'Databricks Unity Catalog', category: 'Lakehouse', status: 'Connected', rows: '2,400 marketing records', cadence: 'Hourly sync', icon: '', latency: '35ms', health: '100.0%' },
+    { id: 'stripe', name: 'Stripe Billing & Payments', category: 'Payment Gateway', status: 'Connected', rows: '12,000 support logs', cadence: 'Real-time Webhook', icon: '', latency: '8ms', health: '99.99%' },
+    { id: 'salesforce', name: 'Salesforce Enterprise CRM', category: 'CRM & Pipeline', status: 'Connected', rows: '342 accounts', cadence: 'Daily sync', icon: '', latency: '240ms', health: '99.85%' },
+    { id: 'bigquery', name: 'Google BigQuery', category: 'Analytics Lake', status: 'Available', rows: '—', cadence: 'Batch sync', icon: '', latency: '—', health: 'Ready' },
+    { id: 'postgres', name: 'PostgreSQL Operational DB', category: 'OLTP Database', status: 'Available', rows: '—', cadence: 'CDC Streaming', icon: '', latency: '—', health: 'Ready' },
   ]);
 
   const [customCsv, setCustomCsv] = useState('');
@@ -26,6 +26,22 @@ export default function DataConnectorsPage() {
 
   useEffect(() => {
     getDispatchHistory().then(res => setDispatchLogs(res.history || [])).catch(() => {});
+    getHealth().then(health => {
+      if (health?.data_rows) {
+        setConnectors(prev => prev.map(c => {
+          if (c.id === 'snowflake' && health.data_rows.transactions) {
+            return { ...c, rows: `${health.data_rows.transactions.toLocaleString()} tx rows` };
+          }
+          if (c.id === 'databricks' && health.data_rows.marketing) {
+            return { ...c, rows: `${health.data_rows.marketing.toLocaleString()} marketing rows` };
+          }
+          if (c.id === 'stripe' && health.data_rows.support) {
+            return { ...c, rows: `${health.data_rows.support.toLocaleString()} support tickets` };
+          }
+          return c;
+        }));
+      }
+    }).catch(() => {});
   }, []);
 
   const sampleCsvData = `date,region,orders,revenue,checkout_errors,marketing_spend

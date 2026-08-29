@@ -82,12 +82,6 @@ export default function Layout() {
               ))}
             </div>
 
-            {/* Accenture AI Trust Status Pill */}
-            <div className="hidden md:flex items-center gap-1.5 px-3 py-1.5 bg-[#a100ff]/10 rounded-xl border border-[#a100ff]/20 text-[11px] font-bold text-[#7a00c2]">
-              <span className="w-2 h-2 rounded-full bg-[#a100ff] animate-pulse"></span>
-              <span>Accenture Responsible AI Fenced</span>
-            </div>
-
             {/* Notification Bell Dropdown */}
             <div className="relative">
               <button 

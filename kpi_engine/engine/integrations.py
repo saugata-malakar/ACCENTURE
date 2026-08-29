@@ -46,7 +46,7 @@ def dispatch_action(channel: str, payload: dict, persona: str = "ceo") -> dict:
     if channel == "slack":
         webhook_url = os.environ.get("SLACK_WEBHOOK_URL")
         message = (
-            f"🚨 *P1 KPI Anomaly — Action Dispatched*\n"
+            f"*P1 KPI Anomaly — Action Dispatched*\n"
             f"• *KPI*: {payload.get('kpi', 'Revenue')} moved {payload.get('pct_change', '-11.6%')} "
             f"in *{payload.get('region', 'East Region')}*\n"
             f"• *Root Cause*: {payload.get('driver', 'Checkout Error Rate')}\n"

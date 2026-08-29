@@ -14,10 +14,10 @@ export default function DispatchActionModal({ onClose, action, caseData }) {
   const [copied, setCopied] = useState(false);
 
   const channels = [
-    { id: 'slack', name: 'Slack Incident Channel', icon: '💬', desc: 'Broadcast P1 alert to #incident-ops' },
-    { id: 'jira', name: 'Jira Engineering Ticket', icon: '🎫', desc: 'Create P1 engineering escalation' },
-    { id: 'crm_outreach', name: 'Salesforce CRM Campaign', icon: '👥', desc: 'Trigger customer cart recovery' },
-    { id: 'webhook', name: 'Enterprise Webhook', icon: '⚡', desc: 'Post JSON payload to event bus' },
+    { id: 'slack', name: 'Slack Incident Channel', icon: '', desc: 'Broadcast P1 alert to #incident-ops' },
+    { id: 'jira', name: 'Jira Engineering Ticket', icon: '', desc: 'Create P1 engineering escalation' },
+    { id: 'crm_outreach', name: 'Salesforce CRM Campaign', icon: '', desc: 'Trigger customer cart recovery' },
+    { id: 'webhook', name: 'Enterprise Webhook', icon: '', desc: 'Post JSON payload to event bus' },
   ];
 
   const handleDispatch = async () => {
@@ -58,7 +58,7 @@ export default function DispatchActionModal({ onClose, action, caseData }) {
         <div className="p-5 border-b border-slate-100 bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white flex justify-between items-center">
           <div className="flex items-center gap-2.5">
             <span className="p-2 rounded-xl bg-indigo-600 text-white text-xs font-bold">
-              ⚡ LIVE
+              LIVE
             </span>
             <div>
               <h2 className="text-base font-bold">Enterprise Action Dispatcher</h2>
@@ -88,7 +88,7 @@ export default function DispatchActionModal({ onClose, action, caseData }) {
                 <div>
                   <div className="flex items-center gap-2 flex-wrap">
                     <h3 className={`font-bold text-sm ${dispatchResult.real_integration ? 'text-emerald-900' : 'text-amber-900'}`}>
-                      {dispatchResult.real_integration ? '⚡ Real Integration Fired' : '🔵 Simulated Dispatch Logged'}
+                      {dispatchResult.real_integration ? 'Real Integration Fired' : 'Simulated Dispatch Logged'}
                     </h3>
                     <span className={`text-[9px] font-black px-2 py-0.5 rounded-full border ${
                       dispatchResult.real_integration
@@ -173,7 +173,7 @@ export default function DispatchActionModal({ onClose, action, caseData }) {
                       }`}
                     >
                       <div className="flex items-center gap-2 mb-1">
-                        <span className="text-lg">{ch.icon}</span>
+                        {ch.icon && <span className="text-lg">{ch.icon}</span>}
                         <span className="text-xs font-bold text-slate-900">{ch.name}</span>
                       </div>
                       <p className="text-[11px] text-slate-500">{ch.desc}</p>

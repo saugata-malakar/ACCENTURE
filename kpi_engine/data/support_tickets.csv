@@ -6419,3 +6419,11 @@ date,region,category,ticket_count
 2026-08-27,North Region,shipping_query,15
 2026-08-27,North Region,return_request,17
 2026-08-27,North Region,other,40
+2026-08-28,East Region,checkout_error,11
+2026-08-28,East Region,shipping_query,27
+2026-08-28,East Region,return_request,14
+2026-08-28,East Region,other,37
+2026-08-28,North Region,checkout_error,8
+2026-08-28,North Region,shipping_query,25
+2026-08-28,North Region,return_request,13
+2026-08-28,North Region,other,28

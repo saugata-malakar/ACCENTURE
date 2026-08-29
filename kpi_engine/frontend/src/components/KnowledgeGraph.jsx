@@ -39,8 +39,8 @@ export default function KnowledgeGraph() {
     fetchGraph();
   }, []);
 
-  const width = 900;
-  const height = 620;
+  const width = 1200;
+  const height = 800;
   const cx = width / 2;
   const cy = height / 2;
 
@@ -63,14 +63,14 @@ export default function KnowledgeGraph() {
           const idx = kpis.filter(k => k.id !== 'Revenue').indexOf(node);
           const total = kpis.length - 1 || 1;
           const angle = (idx / total) * 2 * Math.PI - Math.PI / 2;
-          const r = 160;
+          const r = 220;
           x = cx + r * Math.cos(angle);
           y = cy + r * Math.sin(angle);
         } else {
           const idx = drivers.indexOf(node);
           const total = drivers.length || 1;
           const angle = (idx / total) * 2 * Math.PI + Math.PI / 6;
-          const r = 280;
+          const r = 380;
           x = cx + r * Math.cos(angle);
           y = cy + r * Math.sin(angle);
         }
@@ -86,20 +86,20 @@ export default function KnowledgeGraph() {
         let y = cy;
         if (node.id === 'Revenue') {
           x = cx;
-          y = 100;
+          y = 120;
         } else if (node.type === 'kpi') {
           const otherKpis = kpis.filter(k => k.id !== 'Revenue');
           const idx = otherKpis.indexOf(node);
           const total = otherKpis.length || 1;
           const spacing = width / (total + 1);
           x = spacing * (idx + 1);
-          y = 280;
+          y = 380;
         } else {
           const idx = drivers.indexOf(node);
           const total = drivers.length || 1;
           const spacing = width / (total + 1);
           x = spacing * (idx + 1);
-          y = 480;
+          y = 620;
         }
         return { ...node, x, y };
       });
@@ -274,7 +274,7 @@ export default function KnowledgeGraph() {
 
           {/* SVG Canvas Area */}
           <div 
-            className="flex-1 relative bg-radial from-slate-50 via-slate-100/50 to-slate-100 cursor-grab active:cursor-grabbing select-none overflow-hidden min-h-[560px]"
+            className="flex-1 relative bg-radial from-slate-50 via-slate-100/50 to-slate-100 cursor-grab active:cursor-grabbing select-none overflow-hidden min-h-[720px]"
             onMouseDown={handleMouseDown}
             onMouseMove={handleMouseMove}
             onMouseUp={handleMouseUp}
@@ -353,7 +353,7 @@ export default function KnowledgeGraph() {
                   const isConnected = connectedNodeIds.has(node.id);
                   const isDimmed = activeNode && !isConnected;
                   const isKpi = node.type === 'kpi';
-                  const radius = isKpi ? (node.id === 'Revenue' ? 36 : 28) : 22;
+                  const radius = isKpi ? (node.id === 'Revenue' ? 44 : 34) : 28;
 
                   return (
                     <g
@@ -597,7 +597,9 @@ export default function KnowledgeGraph() {
             <div className="bg-slate-800/80 p-3 rounded-xl border border-slate-700 space-y-1.5 text-xs">
               <div className="flex justify-between text-slate-300">
                 <span>Estimated Net Revenue Drag:</span>
-                <span className="text-rose-400 font-bold">-${(simulatedShock * 18.5).toFixed(0)}/day</span>
+                <span className="text-rose-400 font-bold">
+                  -${(simulatedShock * (selectedNode?.business_weight ? selectedNode.business_weight * 2.8 : (selectedNode?.id === 'Checkout Error Rate' ? 26.2 : 18.5))).toFixed(0)}/day
+                </span>
               </div>
               <div className="flex justify-between text-slate-300">
                 <span>Impact Confidence:</span>

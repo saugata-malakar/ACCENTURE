@@ -72,7 +72,7 @@ export default function PipelineMethodMap({ stages }) {
                   </span>
                   {stage.method === 'llm' && (
                     <span className="text-[9px] bg-amber-50 text-amber-600 border border-amber-200 px-1.5 py-0.5 rounded-full font-bold">
-                      ⚡ AI
+                      AI
                     </span>
                   )}
                 </div>

@@ -106,9 +106,9 @@ export default function ScenarioSimulatorPage() {
       {/* Preset Strategy Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         {[
-          { title: '⚡ Rapid Engineering Hotfix', error: 0.8, price: 0, mktg: 0, desc: 'Fix checkout bugs back to 0.8% baseline' },
-          { title: '📈 Growth & Ad Ramp', error: 0.8, price: 0, mktg: 1500, desc: 'Hotfix + $1,500/wk marketing ad spend boost' },
-          { title: '🏷️ Price Discount Winback', error: 0.8, price: -5, mktg: 500, desc: '5% temporary cart discount + ad campaign' },
+          { title: 'Rapid Engineering Hotfix', error: 0.8, price: 0, mktg: 0, desc: 'Fix checkout bugs back to 0.8% baseline' },
+          { title: 'Growth & Ad Ramp', error: 0.8, price: 0, mktg: 1500, desc: 'Hotfix + $1,500/wk marketing ad spend boost' },
+          { title: 'Price Discount Winback', error: 0.8, price: -5, mktg: 500, desc: '5% temporary cart discount + ad campaign' },
         ].map((preset, idx) => (
           <button
             key={idx}

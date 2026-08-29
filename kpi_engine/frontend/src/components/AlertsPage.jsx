@@ -12,17 +12,17 @@ import DispatchActionModal from './DispatchActionModal';
 
 // Helper to estimate $ impact based on metric and % change
 function estimateDollarImpact(kpi, region, pctChange) {
-  if (kpi === 'Revenue') {
-    const base = region === 'East Region' ? 28450 : 22100;
-    return Math.round(Math.abs((pctChange / 100) * base));
+  const base = region === 'East Region' ? 28450 : (region === 'North Region' ? 31200 : 25000);
+  if (kpi === 'Revenue' || kpi === 'revenue') {
+    return Math.round(Math.abs(((pctChange || 11.6) / 100) * base));
   }
-  if (kpi === 'Checkout Error Rate') {
-    return 3135; // direct revenue leak per week
+  if (kpi === 'Checkout Error Rate' || kpi === 'checkout_errors') {
+    return Math.round(base * 0.11);
   }
-  if (kpi === 'Average Order Value') {
-    return 1450;
+  if (kpi === 'Average Order Value' || kpi === 'aov') {
+    return Math.round(base * 0.05);
   }
-  return 850;
+  return Math.round(base * (Math.abs(pctChange || 5) / 100));
 }
 
 export default function AlertsPage() {

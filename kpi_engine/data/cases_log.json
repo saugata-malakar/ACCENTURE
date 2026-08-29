@@ -8,9 +8,9 @@
     "confidence_level": "HIGH",
     "contribution_pct": 98,
     "narrative_hash": "",
-    "drift_checked_at": "2026-08-28T05:53:38.918498+00:00",
-    "is_stale": false,
-    "stale_reason": null
+    "drift_checked_at": "2026-08-28T19:43:21.548462+00:00",
+    "is_stale": true,
+    "stale_reason": "Top driver changed: was 'Checkout error rate', now 'Marketing spend'"
   },
   {
     "logged_at": "2026-08-26T14:21:07.765084+00:00",
@@ -21,9 +21,9 @@
     "confidence_level": "ABSTAIN",
     "contribution_pct": 84,
     "narrative_hash": "",
-    "drift_checked_at": "2026-08-28T05:53:38.918498+00:00",
-    "is_stale": false,
-    "stale_reason": null
+    "drift_checked_at": "2026-08-28T19:43:21.548462+00:00",
+    "is_stale": true,
+    "stale_reason": "Top driver changed: was 'Checkout error rate', now 'Marketing spend'"
   },
   {
     "logged_at": "2026-08-26T14:31:08.697946+00:00",
@@ -34,9 +34,9 @@
     "confidence_level": "N/A",
     "contribution_pct": 0,
     "narrative_hash": "",
-    "drift_checked_at": "2026-08-28T05:53:38.918498+00:00",
-    "is_stale": false,
-    "stale_reason": null
+    "drift_checked_at": "2026-08-28T19:43:21.548462+00:00",
+    "is_stale": true,
+    "stale_reason": "Top driver changed: was 'None', now 'Marketing spend'"
   },
   {
     "logged_at": "2026-08-28T05:59:59.000015+00:00",
@@ -47,9 +47,9 @@
     "confidence_level": "N/A",
     "contribution_pct": 0,
     "narrative_hash": "",
-    "drift_checked_at": "2026-08-28T06:00:01.123345+00:00",
-    "is_stale": false,
-    "stale_reason": null
+    "drift_checked_at": "2026-08-28T19:43:21.548462+00:00",
+    "is_stale": true,
+    "stale_reason": "Top driver changed: was 'None', now 'Checkout error rate'"
   },
   {
     "logged_at": "2026-08-28T06:22:47.079491+00:00",
@@ -60,8 +60,8 @@
     "confidence_level": "N/A",
     "contribution_pct": 0,
     "narrative_hash": "",
-    "drift_checked_at": "2026-08-28T06:25:55.260252+00:00",
-    "is_stale": false,
-    "stale_reason": null
+    "drift_checked_at": "2026-08-28T19:43:21.548462+00:00",
+    "is_stale": true,
+    "stale_reason": "Top driver changed: was 'None', now 'Checkout error rate'"
   }
 ]

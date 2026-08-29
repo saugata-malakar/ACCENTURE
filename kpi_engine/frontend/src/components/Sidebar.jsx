@@ -30,9 +30,6 @@ export default function Sidebar() {
       <div className="p-6 border-b border-slate-800/80 space-y-3">
         <div className="flex items-center justify-between">
           <AccentureLogo className="h-6" variant="light" />
-          <span className="px-2 py-0.5 rounded-full text-[9px] font-bold bg-[#a100ff]/20 text-[#d896ff] border border-[#a100ff]/30">
-            AI CORE
-          </span>
         </div>
         <div>
           <span className="text-[11px] font-bold tracking-tight text-white block leading-tight">
