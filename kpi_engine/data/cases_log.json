@@ -65,13 +65,13 @@
     "stale_reason": null
   },
   {
-    "logged_at": "2026-08-29T06:09:35.241111+00:00",
+    "logged_at": "2026-08-29T06:25:32.496046+00:00",
     "region": "East Region",
     "week_start": "2026-08-24",
     "metric": "revenue",
     "top_driver": "Purchase frequency",
     "confidence_level": "LOW",
-    "contribution_pct": 53,
+    "contribution_pct": 55,
     "narrative_hash": "",
     "drift_checked_at": null,
     "is_stale": false,
