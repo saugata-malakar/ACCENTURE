@@ -13,9 +13,12 @@ import KpiCard from './KpiCard';
 import AlertsBanner from './AlertsBanner';
 import TelemetryPanel from './TelemetryPanel';
 import WaterfallChart from './WaterfallChart';
-import AccentureLogo from './AccentureLogo';
+import AccentureLogo, { AccentureSymbol } from './AccentureLogo';
 import DataStatusBadge from './DataStatusBadge';
 import DispatchActionModal from './DispatchActionModal';
+import CausalFlowRibbon from './CausalFlowRibbon';
+import ExecutiveHUD from './ExecutiveHUD';
+import ExecutiveBriefingMode from './ExecutiveBriefingMode';
 
 // Derive aggregate metrics from kpi_summaries
 function deriveAggregates(kpiSummaries) {
@@ -196,6 +199,7 @@ export default function Dashboard() {
   const [isLiveSync, setIsLiveSync] = useState(false);
   const [approvedActions, setApprovedActions] = useState(new Set());
   const [selectedQuickAction, setSelectedQuickAction] = useState(null);
+  const [showBriefingModal, setShowBriefingModal] = useState(false);
 
   const fetchDashboardData = () => {
     setLoading(true);
@@ -263,10 +267,10 @@ export default function Dashboard() {
 
       {/* ── Hero Header ─────────────────────────────────────────────── */}
       <div className="p-6 rounded-3xl text-white shadow-xl flex flex-col md:flex-row justify-between items-start md:items-center gap-6 bg-gradient-to-r from-slate-950 via-[#19042b] to-slate-950 border border-[#a100ff]/30">
-        <div className="space-y-1.5">
-          <div className="flex items-center gap-2">
-            <AccentureLogo className="h-4 opacity-90" variant="light" />
-            <span className="text-slate-500">•</span>
+        <div className="space-y-2">
+          <div className="flex flex-wrap items-center gap-2.5">
+            <AccentureLogo className="h-5" variant="light" showSubtext subtext="APPLIED INTELLIGENCE" />
+            <span className="text-slate-600">•</span>
             <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-[#a100ff]/20 text-[#d896ff] border border-[#a100ff]/30">
               {persona === 'ceo' ? 'Executive Strategy Suite'
                : persona === 'manager' ? 'Operations Command'
@@ -276,7 +280,7 @@ export default function Dashboard() {
               THREAT: {threatLevel}
             </span>
           </div>
-          <h1 className="text-2xl md:text-3xl font-bold tracking-tight">
+          <h1 className="text-2xl md:text-3xl font-black tracking-tight">
             {persona === 'ceo' && 'Executive Strategy & P&L Intelligence'}
             {persona === 'manager' && 'Regional Operations & Tactical Velocity'}
             {persona === 'analyst' && 'Statistical Diagnostics & Data Governance'}
@@ -289,8 +293,16 @@ export default function Dashboard() {
         </div>
 
         <div className="flex flex-col gap-3 items-end">
-          {/* Live Data Status Badge */}
-          <DataStatusBadge />
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setShowBriefingModal(true)}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-[#7a00c2] to-[#a100ff] hover:from-[#8b00de] hover:to-[#b324ff] text-white text-xs font-bold shadow-md shadow-purple-900/30 transition-all hover:scale-105 active:scale-95"
+            >
+              <Sparkles size={13} />
+              <span>C-Suite Briefing</span>
+            </button>
+            <DataStatusBadge />
+          </div>
 
           <div className="flex items-center gap-4 bg-white/10 backdrop-blur px-5 py-3 rounded-2xl border border-white/10">
             <div>
@@ -321,6 +333,9 @@ export default function Dashboard() {
 
       {/* Real-Time Live Revenue Pulse */}
       <LiveRevenuePulse baseDailyRevenue={Math.round((aggregates?.totalRevenue || 28000) / 7)} />
+
+      {/* Interactive Visual Causal Flow Ribbon */}
+      <CausalFlowRibbon />
 
       {/* Priority Alert Banner */}
       {data.active_alerts?.length > 0 && (
@@ -834,6 +849,15 @@ export default function Dashboard() {
           }}
         />
       )}
+
+      {/* Floating Executive HUD Control Bar */}
+      <ExecutiveHUD onOpenBriefing={() => setShowBriefingModal(true)} />
+
+      {/* Full-Screen C-Suite Executive Briefing Suite */}
+      <ExecutiveBriefingMode 
+        isOpen={showBriefingModal} 
+        onClose={() => setShowBriefingModal(false)} 
+      />
 
     </div>
   );

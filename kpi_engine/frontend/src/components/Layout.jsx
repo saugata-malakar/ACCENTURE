@@ -48,12 +48,19 @@ export default function Layout() {
         <header className="h-16 bg-white border-b border-slate-200/80 px-8 flex items-center justify-between z-10 shrink-0 shadow-xs">
           
           {/* Global Quick Search & Accenture Sub-brand */}
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-4">
+            <div className="hidden lg:flex items-center gap-2 pl-1 pr-3 py-1 bg-slate-50 border border-slate-200 rounded-xl">
+              <AccentureLogo className="h-4" variant="dark" />
+              <span className="text-[10px] font-bold text-[#a100ff] uppercase tracking-wider pl-1.5 border-l border-slate-300">
+                Decision Core
+              </span>
+            </div>
+
             <form onSubmit={handleSearchSubmit} className="relative w-80">
               <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" size={15} />
               <input 
                 type="text"
-                placeholder="Search metrics, regions, or drivers..."
+                placeholder="Search metrics, regions, or drivers... (Ctrl+K)"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full bg-slate-50 pl-9 pr-4 py-1.5 text-xs rounded-xl border border-slate-200 outline-none focus:bg-white focus:border-[#a100ff] focus:ring-2 focus:ring-[#a100ff]/10 transition-all font-medium"

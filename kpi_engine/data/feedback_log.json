@@ -128,5 +128,18 @@
     "corrected_cause": null,
     "severity_rating": 5,
     "action_effectiveness": null
+  },
+  {
+    "timestamp": "2026-08-29T06:09:37.877109+00:00",
+    "analyst": "test_analyst",
+    "region": "East Region",
+    "metric": "revenue",
+    "week_start": "2026-08-24",
+    "system_top_driver": "Purchase frequency",
+    "system_confidence": "LOW",
+    "verdict": "confirmed",
+    "corrected_cause": null,
+    "severity_rating": 5,
+    "action_effectiveness": null
   }
 ]
