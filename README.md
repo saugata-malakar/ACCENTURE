@@ -13,21 +13,44 @@
 
 # Accenture Applied Intelligence
 ### Enterprise Decision Intelligence & KPI Storytelling Engine
+`accenture-decision-intelligence-engine` · `v2.4.0-enterprise`
 
-**A Total Enterprise Reinvention (TER) Platform: Transforming Metric Monitoring into Automated Causal Discovery, Executive Narration, and Governed Operational Execution**
-
-[![Accenture](https://img.shields.io/badge/Accenture-Applied%20Intelligence-A100FF?style=for-the-badge&logo=accenture&logoColor=white)](https://accenture.com)
-[![FastAPI](https://img.shields.io/badge/FastAPI-0.109.0-009688?style=for-the-badge&logo=fastapi&logoColor=white)](https://accenture-oi2k.onrender.com/docs)
-[![React 18](https://img.shields.io/badge/React-18.3.1-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://accenture-oi2k.onrender.com)
-[![DuckDB](https://img.shields.io/badge/DuckDB-In--Memory%20C%2B%2B-FFF000?style=for-the-badge&logo=duckdb&logoColor=black)](https://duckdb.org)
-[![Groq LPU](https://img.shields.io/badge/Groq%20LPU-Ultra--Fast%20Inference-F05A28?style=for-the-badge)](https://groq.com)
-[![Pytest](https://img.shields.io/badge/Pytest-100%25%20Passed%20(12%2F12)-059669?style=for-the-badge&logo=pytest&logoColor=white)](kpi_engine/tests/test_engine.py)
-
-[Live Production Portal](https://accenture-oi2k.onrender.com) · [Interactive API Docs](https://accenture-oi2k.onrender.com/docs) · [12-Page Business Proposal (PDF)](Accenture_KPI_Decision_Engine_Business_Proposal.pdf) · [3-Min Demo Video Script](demo_video_script.md)
+**A Total Enterprise Reinvention (TER) Flagship Platform: Transforming Metric Monitoring into Automated Causal Discovery, Additive Mathematical Attribution, and Governed Operational Execution.**
 
 ---
 
+<!-- Official Accenture Brand Badges -->
+[![Accenture Core Purple](https://img.shields.io/badge/Brand-Accenture%20Purple%20%23A100FF-A100FF?style=for-the-badge&logo=accenture&logoColor=white)](https://accenture.com)
+[![FastAPI Backend](https://img.shields.io/badge/FastAPI-0.109.0-009688?style=for-the-badge&logo=fastapi&logoColor=white)](https://accenture-oi2k.onrender.com/docs)
+[![React 18 UI](https://img.shields.io/badge/React-18.3.1-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://accenture-oi2k.onrender.com)
+[![DuckDB C++ Engine](https://img.shields.io/badge/DuckDB-In--Memory%20C%2B%2B-FFF000?style=for-the-badge&logo=duckdb&logoColor=black)](https://duckdb.org)
+[![Groq LPU Inference](https://img.shields.io/badge/Groq%20LPU-Sub--Second%20Inference-F05A28?style=for-the-badge)](https://groq.com)
+[![Automated Pytest](https://img.shields.io/badge/Pytest-100%25%20Passed%20(12%2F12)-10B981?style=for-the-badge&logo=pytest&logoColor=white)](kpi_engine/tests/test_engine.py)
+
+---
+
+[🌐 Live Production Portal](https://accenture-oi2k.onrender.com) · [⚡ REST API & Swagger UI](https://accenture-oi2k.onrender.com/docs) · [📄 12-Page Business Proposal (PDF)](Accenture_KPI_Decision_Engine_Business_Proposal.pdf) · [🎬 3-Min Demonstration Script](demo_video_script.md)
+
 </div>
+
+---
+
+## 🎨 Official Accenture Corporate Color Palette & Brand Tokens
+
+The platform is designed in accordance with the **Accenture Global Brand Identity & Design System Standards**:
+
+| Brand Swatch | Color Name | Hex Code | Pantone / Token | Enterprise Role & Semantic Function |
+| :--- | :--- | :--- | :--- | :--- |
+| ![#A100FF](https://via.placeholder.com/15/A100FF/A100FF.png) | **Accenture Core Violet** | `#A100FF` | `Pantone 2592 C` | **Primary Signature Brand Identity**, forward chevron (`>`), active primary CTA buttons, hero glows |
+| ![#7A00C2](https://via.placeholder.com/15/7A00C2/7A00C2.png) | **Accenture Deep Violet** | `#7A00C2` | `Dark Violet 700` | Header gradients, card stroke highlights, active tab states |
+| ![#D896FF](https://via.placeholder.com/15/D896FF/D896FF.png) | **Accenture Electric Violet**| `#D896FF` | `Light Violet 300` | Status badges, high-contrast typography, causal DAG root driver tags |
+| ![#0B0F19](https://via.placeholder.com/15/0B0F19/0B0F19.png) | **Accenture Obsidian Slate** | `#0B0F19` | `Dark Slate 950` | Executive dark-mode canvas, glassmorphic HUD background, top navbar |
+| ![#10B981](https://via.placeholder.com/15/10B981/10B981.png) | **Accenture Signal Emerald** | `#10B981` | `Emerald 500` | High Confidence rating, positive product mix lift ($+\$11.39$), authorized SLA approvals |
+| ![#F59E0B](https://via.placeholder.com/15/F59E0B/F59E0B.png) | **Accenture Signal Amber** | `#F59E0B` | `Amber 500` | Elevated risk rating, model drift alerts, moderate confidence, price contraction effect |
+| ![#F43F5E](https://via.placeholder.com/15/F43F5E/F43F5E.png) | **Accenture Signal Crimson** | `#F43F5E` | `Rose 500` | Critical P1 incident flag, checkout error spike ($+1,450\%$), volume collapse ($-14.2\%$) |
+| ![#6366F1](https://via.placeholder.com/15/6366F1/6366F1.png) | **Accenture Cyber Indigo** | `#6366F1` | `Indigo 500` | Intermediate causal DAG nodes, Pearson correlation edges ($r \ge 0.70$), DuckDB query traces |
+
+---
 
 ## 📑 Table of Contents
 1. [Executive Overview & Problem Framing](#-executive-overview--problem-framing)
@@ -84,8 +107,6 @@ The **Accenture KPI Decision Engine** bridges this divide. It couples **vectoriz
 
 ## 🏗️ 6-Stage Autonomous Decision Architecture
 
-The engine operates on a 6-tier decoupled architecture:
-
 ```
 ┌──────────────────────────────────────────────────────────────────────────────────────────────────┐
 │                                 ACCENTURE APPLIED INTELLIGENCE                                   │
@@ -113,8 +134,6 @@ The engine operates on a 6-tier decoupled architecture:
 ---
 
 ## 🔬 Factor Impact & Causal Attribution Topology
-
-The platform isolates **how individual operational and commercial factors are affected** and decomposes their exact contribution to enterprise P&L metrics:
 
 ```
                           ┌───────────────────────────────┐
@@ -168,7 +187,7 @@ $$\text{Total Net Impact} = -\$319.98 - \$144.57 + \$11.39 = -\$453.16 / \text{d
 
 ## 🎨 Interactive Executive UI/UX Features
 
-1. **Pixel-Perfect Vector Accenture Branding**:
+1. **Pixel-Perfect Vector Accenture Logo (`AccentureLogo.jsx`)**:
    - Signature purple chevron (`>`) positioned above the letter `t` with Gaussian glow filters and dark/light mode responsiveness.
 2. **Interactive Operational-to-Financial Causal Ribbon (`CausalFlowRibbon.jsx`)**:
    - Multi-stage visual bridge animating money flow across root causes, intermediate friction, and net top-line P&L.

@@ -77,7 +77,14 @@ async def lifespan(application):
     yield
 
 
-app = FastAPI(title="KPI Storytelling Engine — Hackathon Edition", lifespan=lifespan)
+app = FastAPI(
+    title="Accenture Applied Intelligence — Enterprise Decision Intelligence & KPI Storytelling Engine",
+    description="A Total Enterprise Reinvention (TER) Platform: Transforming metric monitoring into automated causal discovery, deterministic additive waterfalls, and governed operational execution.",
+    version="2.4.0",
+    docs_url="/docs",
+    redoc_url="/redoc",
+    lifespan=lifespan,
+)
 
 app.add_middleware(
     CORSMiddleware,
